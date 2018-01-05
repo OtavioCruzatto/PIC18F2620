@@ -11,6 +11,8 @@ int converterStringParaInt(char stringParaSerConvertida);
 int tamanhoDaString(char string[]);
 void escreverStringUart(char string[]);
 char converterFloatParaString(float valorParaSerConvertido);
+void verificarBuffer(char string[], char contadorBuffer);
+void limparBuffer(char string[]);
 
 void configureUart() {
     
@@ -108,4 +110,35 @@ void escreverStringUart(char string[]) {
     for(contador = 0; contador < tamanhoDaStr; contador++) {
         escreverCharUart(string[contador]);
     }
+}
+
+void verificarBuffer(char string[], char contadorBuffer) {
+    
+    if(string[contadorBuffer] != '\0'){
+        string[contadorBuffer] = '\0';
+    }
+            
+    contadorBuffer = 0;
+    int i = 0;
+    
+    for(contadorBuffer = 0; contadorBuffer < tamanhoDaString(string); contadorBuffer++) {
+        
+        if(string[contadorBuffer] == '\n'){
+            i = 1;
+        }
+        
+        if(i == 1) {
+            string[contadorBuffer] = string[contadorBuffer + 1];
+        }
+        
+    }
+}
+
+void limparBuffer(char string[]) {
+    
+    int i = 0;
+    for(i=0;i<50;i++){
+        string[i] = 0;
+    }
+    
 }
