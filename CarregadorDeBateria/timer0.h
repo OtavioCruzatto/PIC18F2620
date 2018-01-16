@@ -28,7 +28,7 @@ void configureTimer0() {
     T0CONbits.T0PS = 0b001; // 1:4 Prescale value
     TMR0L = 0xDB;
     TMR0H = 0x0B;
-    T0CONbits.TMR0ON = 1;   // Enables Timer0
+    T0CONbits.TMR0ON = 0;   // Disables Timer0
 }
 
 void habilitarTimer0() {
@@ -36,5 +36,5 @@ void habilitarTimer0() {
 }
 
 void desabilitarTimer0() {
-    T0CONbits.TMR0ON = 0;   // Enables Timer0
+    T0CONbits.TMR0ON = 0;   // Disables Timer0
 }
