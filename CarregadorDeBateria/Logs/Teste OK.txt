@@ -1,0 +1,48 @@
+
+
+
+
+*** Pressione o botao para iniciar os testes! ***
+
+*** Iniciando testes... ***
+
+Carregamento: Desabilitado | Descarregamento: Desabilitado | Teste: 1 | Tensao: 0.000000 V
+Carregamento: Desabilitado | Descarregamento: Desabilitado | Teste: 2 | Tensao: 0.000000 V
+Carregamento: Desabilitado | Descarregamento: Desabilitado | Teste: 3 | Tensao: 0.000000 V
+Carregamento: Desabilitado | Descarregamento: Desabilitado | Teste: 4 | Tensao: 0.000000 V
+Carregamento: Desabilitado | Descarregamento: Desabilitado | Teste: 5 | Tensao: 0.000000 V
+Tensao Media: 0.000000 V
+Teste de Polaridade: OK
+
+Carregamento Habilitado!
+
+Carregamento: Habilitado | Descarregamento: Desabilitado | Teste: 1 | Tensao: 4.012695 V | Corrente: 0.311928 A
+Carregamento: Habilitado | Descarregamento: Desabilitado | Teste: 2 | Tensao: 4.017578 V | Corrente: 0.311928 A
+Carregamento: Habilitado | Descarregamento: Desabilitado | Teste: 3 | Tensao: 4.017578 V | Corrente: 0.311928 A
+Carregamento: Habilitado | Descarregamento: Desabilitado | Teste: 4 | Tensao: 4.017578 V | Corrente: 0.311928 A
+Carregamento: Habilitado | Descarregamento: Desabilitado | Teste: 5 | Tensao: 4.022461 V | Corrente: 0.311928 A
+Tensao Media: 4.017578 V
+Teste de Tensao no Carregamento: OK
+Corrente Media: 0.311928 A
+Teste de Corrente no Carregamento: OK
+
+Descarregamento Habilitado!
+
+Carregamento: Desabilitado | Descarregamento: Habilitado | Teste: 1 | Tensao: 3.670592 V | Corrente: 0.124798 A
+Carregamento: Desabilitado | Descarregamento: Habilitado | Teste: 2 | Tensao: 3.655888 V | Corrente: 0.103890 A
+Carregamento: Desabilitado | Descarregamento: Habilitado | Teste: 3 | Tensao: 3.646112 V | Corrente: 0.093500 A
+Carregamento: Desabilitado | Descarregamento: Habilitado | Teste: 4 | Tensao: 3.646112 V | Corrente: 0.103890 A
+Carregamento: Desabilitado | Descarregamento: Habilitado | Teste: 5 | Tensao: 3.651008 V | Corrente: 0.114278 A
+Tensao Media: 3.653984 V
+Teste de Tensao no Descarregamento: OK
+Corrente Media: 0.108072 A
+Teste de Corrente no Descarregamento: OK
+
+*** BATERIA APROVADA! ***
+
+*** Testes finalizados ***
+
+
+
+
+*** Pressione o botao para iniciar os testes! ***
