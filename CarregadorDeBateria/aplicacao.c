@@ -23,6 +23,7 @@
 #include "interrupts.h"
 #include "controleDaBateria.h"
 #include "buzzer.h"
+#include "analiseDeDados.h"
 
 #define carregamentoDescarregamentoDesabilitados 0
 #define carregamentoHabilitado                   1
@@ -31,6 +32,9 @@
 #define reprovado                                0
 #define aprovado                                 1
 #define botao                               PORTBbits.RB2
+#define ledAprovado                         PORTBbits.RB4
+#define ledEmTeste                          PORTBbits.RB5
+#define ledReprovado                        PORTBbits.RB6
 
 void configureGpios();
 
@@ -50,12 +54,27 @@ void main(void) {
     configureGpios();
     configureTimer0();
     configureInterrupts();
+    escreverStringUart("\n\n\n\n*** Jiga de testes da bateria EVO... ***\n");
+    escreverStringUart("\n*** Pressione o botao para iniciar os testes! ***\n");
+    desabilitarTimer0();
     
-    sinalizacaoBeep();
-    escreverStringUart("\n\n\n\n*** Iniciando testes da bateria EVO... ***\n");
-    habilitarTimer0();
-    
-    while(1);
+    while(1){
+        if(botao == 0) {
+            __delay_ms(20);
+            if(botao == 0) {
+                while(botao == 0);
+                sinalizacaoBeep();
+                ledAprovado = 0;
+                ledReprovado = 0;
+                ledEmTeste = 1;
+                escreverStringUart("\n*** Iniciando testes... ***\n");
+                statusDaBateria = carregamentoDescarregamentoDesabilitados;
+                tempoEmSegundos = 0;
+                contador = 0;
+                habilitarTimer0();
+            }
+        }
+    }
     
 }
 
@@ -137,6 +156,7 @@ void interrupt tratamento() {
                     tempoEmSegundos = 0;
 
                     float tensaoMedia = (( tensaoNaBateria[0] + tensaoNaBateria[1] + tensaoNaBateria[2] + tensaoNaBateria[3] + tensaoNaBateria[4] ) / 5);
+                         
                     escreverStringUart("\nTensao Media: ");
                     escreverStringUart(converterFloatParaString(tensaoMedia));
                     escreverStringUart(" V\n");
@@ -153,7 +173,7 @@ void interrupt tratamento() {
                     escreverStringUart("Corrente Media: ");
                     escreverStringUart(converterFloatParaString(correnteMedia));
                     escreverStringUart(" A\n");
-                    if( (correnteMedia >= 0.280) && (correnteMedia <= 0.320) ) { // AJUSTAR VALORES
+                    if( (correnteMedia >= 0.260) && (correnteMedia <= 0.340) ) { // AJUSTAR VALORES
                         resultadoDosTestes[2] = aprovado;
                         escreverStringUart("Teste de Corrente no Carregamento: OK\n");
                     }
@@ -200,10 +220,15 @@ void interrupt tratamento() {
                 tempoEmSegundos = 0;
                 
                 float tensaoMedia = (( tensaoNaBateria[0] + tensaoNaBateria[1] + tensaoNaBateria[2] + tensaoNaBateria[3] + tensaoNaBateria[4] ) / 5);
+                int indexTensaoMinima = indexDoMenorValor(tensaoNaBateria,5);
+                
                 escreverStringUart("\nTensao Media: ");
                 escreverStringUart(converterFloatParaString(tensaoMedia));
+                escreverStringUart(" V");
+                escreverStringUart("\nMenor tensao medida: ");
+                escreverStringUart(converterFloatParaString(tensaoNaBateria[indexTensaoMinima]));
                 escreverStringUart(" V\n");
-                if( (tensaoMedia >= 3) && (tensaoMedia <= 4.3) ) {   // AJUSTAR VALORES
+                if((tensaoMedia >= 3.3) && (tensaoNaBateria[indexTensaoMinima] >= 3.0)) {   // AJUSTAR VALORES
                     escreverStringUart("Teste de Tensao no Descarregamento: OK\n");
                     resultadoDosTestes[3] = aprovado;
                 }
@@ -237,12 +262,18 @@ void interrupt tratamento() {
                 escreverStringUart("\n*** BATERIA APROVADA! ***\n");
                 escreverStringUart("\n*** Testes finalizados ***\n");
                 escreverStringUart("\n\n\n\n*** Pressione o botao para iniciar os testes! ***\n");
+                ledAprovado = 1;
+                ledEmTeste = 0;
+                ledReprovado = 0;
                 sinalizacaoAprovada();
             }
             else {
                 escreverStringUart("\n*** BATERIA REPROVADA! ***\n");
                 escreverStringUart("\n*** Testes finalizados ***\n");
                 escreverStringUart("\n\n\n\n*** Pressione o botao para iniciar os testes! ***\n");
+                ledAprovado = 0;
+                ledEmTeste = 0;
+                ledReprovado = 1 ;
                 sinalizacaoFalha();
             }
         }
