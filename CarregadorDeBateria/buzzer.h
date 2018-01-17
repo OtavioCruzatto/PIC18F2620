@@ -17,7 +17,7 @@ void sinalizacaoAprovada() {
 
 void sinalizacaoFalha() {
     buzzer = 1;
-    __delay_ms(1100);
+    __delay_ms(1000);
     buzzer = 0;
 }
 
