@@ -3,6 +3,7 @@
  * Author: otavio
  *
  * Created on 11 de Janeiro de 2018, 14:06
+ * Versão funcional 1.0
  */
 
 /*
@@ -18,7 +19,7 @@
 #include <pic18f2620.h>
 #include "adc.h"
 #include "configurationBits.h"
-#include "uart.h"
+#include "uart.h" 
 #include "timer0.h"
 #include "interrupts.h"
 #include "controleDaBateria.h"
@@ -81,6 +82,9 @@ void main(void) {
 void configureGpios() {
     TRISB = 0b00000100;
     PORTB = 0b00000000;
+    
+    desabilitarCarregamentoDaBateria();
+    desabilitarDescarregamentoDaBateria();
 }
 
 void interrupt tratamento() {
