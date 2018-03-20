@@ -8,7 +8,6 @@
 #include <xc.h>
 #include "configurationBits.h"
 #include "uart.h"
-#include "timer0.h"
 #include "interrupts.h"
 #include <pic18f2620.h>
 #include <stdio.h>
@@ -18,8 +17,6 @@
 
 #define ENVIO_DE_COMANDO_NAO_LIBERADO   0
 #define ENVIO_DE_COMANDO_LIBERADO       1
-#define CONSULTA                        2
-#define CONFIGURACAO                    3
 
 #define COMANDO_AT_PADRAO                       "AT\r"
 #define SETAR_BAUDRATE_1200BPS                  "ATBD0\r"
@@ -56,7 +53,6 @@
 #define ENTRAR_EM_MODO_DE_COMANDO               "+++"
 
 char statusDeEnvioDeComando = ENVIO_DE_COMANDO_LIBERADO;
-char tipoDeComando = CONSULTA;
 char contadorBuffer = 0;
 char bufferSerial[50];
 
@@ -68,10 +64,12 @@ void sairDoModoDeComando();
 void setarPanIdDoZigbee(char panId[]);
 void salvarAsConfiguracoesDoZigbee();
 void setarModoDeFabricaNoZigbee();
+char consultarParteAltaDoIdDoZigbee();
+char consultarParteBaixaDoIdDoZigbee();
+char consultarPanIdDoZigbee();
 
 void main(void) {
     configureUart();
-    configureTimer0();
     configureInterrupts();
     configurarGPIO();
     
@@ -80,6 +78,11 @@ void main(void) {
     entrarEmModoDeComando();
     setarParteAltaDoIdDeDestinoZigbee("0013A200");
     setarParteBaixaDoIdDeDestinoZigbee("98765432");
+    char *parteAltaDoId = consultarParteAltaDoIdDoZigbee();
+    char *parteBaixaDoId = consultarParteBaixaDoIdDoZigbee();
+    char *panId = consultarPanIdDoZigbee();
+
+    
     sairDoModoDeComando();
     
     while(1);
@@ -202,6 +205,63 @@ void setarModoDeFabricaNoZigbee() {
         limparBuffer(bufferSerial);
         contadorBuffer = 0;
     }
+}
+
+char consultarParteAltaDoIdDoZigbee() {
+    char parteAltaDoId[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    if(statusDeEnvioDeComando == ENVIO_DE_COMANDO_LIBERADO) {
+        __delay_ms(500);
+        limparBuffer(bufferSerial);
+        escreverStringUart(LER_PARTE_ALTA_DO_ID_DO_ZIGBEE);
+        __delay_ms(500);
+
+        char contador = 0;
+        for(contador = 0; contador < 10; contador++) {
+            parteAltaDoId[contador] = bufferSerial[contador];
+        }
+        
+        limparBuffer(bufferSerial);
+        contadorBuffer = 0;
+    }
+    return parteAltaDoId;
+}
+
+char consultarParteBaixaDoIdDoZigbee() {
+    char parteBaixaDoId[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    if(statusDeEnvioDeComando == ENVIO_DE_COMANDO_LIBERADO) {
+        __delay_ms(500);
+        limparBuffer(bufferSerial);
+        escreverStringUart(LER_PARTE_BAIXA_DO_ID_DO_ZIGBEE);
+        __delay_ms(500);
+
+        char contador = 0;
+        for(contador = 0; contador < 10; contador++) {
+            parteBaixaDoId[contador] = bufferSerial[contador];
+        }
+        
+        limparBuffer(bufferSerial);
+        contadorBuffer = 0;
+    }
+    return parteBaixaDoId;
+}
+
+char consultarPanIdDoZigbee() {
+    char panId[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    if(statusDeEnvioDeComando == ENVIO_DE_COMANDO_LIBERADO) {
+        __delay_ms(500);
+        limparBuffer(bufferSerial);
+        escreverStringUart(LER_PANID_DO_ZIGBEE);
+        __delay_ms(500);
+
+        char contador = 0;
+        for(contador = 0; contador < 10; contador++) {
+            panId[contador] = bufferSerial[contador];
+        }
+        
+        limparBuffer(bufferSerial);
+        contadorBuffer = 0;
+    }
+    return panId;
 }
 
 void configurarGPIO() {
